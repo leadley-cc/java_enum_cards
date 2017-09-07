@@ -6,7 +6,6 @@ package com.example.michael.cardgamelab;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -14,17 +13,18 @@ import static org.junit.Assert.assertNotNull;
 
 public class GameTest {
     Game game;
-//    Game spyGame;
+    Game bigGame;
     Player player1;
     Player player2;
 
     @Before
     public void before() {
-//        spyGame = Mockito.spy(game);
         player1 = new Player("Alice");
         player2 = new Player("Michael");
-        game = new Game(player1, player2);
+        game = new Game(1, player1, player2);
         game.generateDeck();
+        bigGame = new Game(2, player1, player2);
+        bigGame.generateDeck();
     }
 
     @Test
@@ -46,28 +46,47 @@ public class GameTest {
     @Test
     public void testDealingGivesPlayerCard() {
         game.deal(player1);
-        assertNotNull(player1.getCard());
+        assertNotNull(player1.getCards()[0]);
     }
 
     @Test
     public void testPlayDealsCardsToPlayers(){
         game.play();
-        assertNotEquals(player1.getCard(), player2.getCard());
+        assertNotEquals(player1.getCards()[0], player2.getCards()[0]);
         assertEquals(50, game.getDeck().size());
     }
 
     @Test
     public void testWinnerIsPlayerWithHighestCard() {
-        player1.setCard(new Card(CardSuit.CLUBS, CardFace.FIVE));
-        player2.setCard(new Card(CardSuit.HEARTS, CardFace.THREE));
+        player1.setCards(new Card(CardSuit.CLUBS, CardFace.FIVE));
+        player2.setCards(new Card(CardSuit.HEARTS, CardFace.THREE));
         assertEquals(player1, game.winner());
     }
 
     @Test
     public void testWinnerIsNotJustFirstPlayer() {
-        player1.setCard(new Card(CardSuit.DIAMONDS, CardFace.SIX));
-        player2.setCard(new Card(CardSuit.SPADES, CardFace.JACK));
+        player1.setCards(new Card(CardSuit.DIAMONDS, CardFace.SIX));
+        player2.setCards(new Card(CardSuit.SPADES, CardFace.JACK));
         assertEquals(player2, game.winner());
+    }
+
+    @Test
+    public void testPlayDealsTwoCardsToPlayers(){
+        bigGame.play();
+        assertEquals(48, bigGame.getDeck().size());
+    }
+
+    @Test
+    public void testWinnerIsPlayerWithHighestCards() {
+        player1.setCards(
+                new Card(CardSuit.CLUBS, CardFace.FIVE),
+                new Card(CardSuit.HEARTS, CardFace.FOUR)
+        );
+        player2.setCards(
+                new Card(CardSuit.HEARTS, CardFace.THREE),
+                new Card(CardSuit.SPADES, CardFace.JACK)
+        );
+        assertEquals(player2, bigGame.winner());
     }
 
 //    @Test

@@ -6,7 +6,7 @@ package com.example.michael.cardgamelab;
 
 public class Player {
     private String name;
-    private Card card;
+    private Card[] cards;
 
     public Player(String name){
         this.name = name;
@@ -16,11 +16,11 @@ public class Player {
         return name;
     }
 
-    public Card getCard() {
-        return card;
+    public Card[] getCards() {
+        return cards;
     }
 
-    public void setCard(Card card) {
-        this.card = card;
+    public void setCards(Card... cards) {
+        this.cards = cards;
     }
 }

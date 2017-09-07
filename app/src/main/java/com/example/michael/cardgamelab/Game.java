@@ -9,15 +9,17 @@ import java.util.*;
 public class Game {
     Player[] players;
     ArrayList<Card> deck;
+    int level;
 
 //    public Game(int numberOfPlayers) {
 //        players = new Player[numberOfPlayers];
 //        deck = new ArrayList<>();
 //    }
 
-    public Game(Player... players) {
+    public Game(int level, Player... players) {
         this.players = players;
         deck = new ArrayList<>();
+        this.level = level;
     }
 
 //    public static void main(String[] args) {
@@ -39,11 +41,15 @@ public class Game {
     public void deal(Player player) {
         Random random = new Random();
 
-        int choice = random.nextInt(deck.size());
+        Card[] cards = new Card[level];
 
-        Card card = deck.remove(choice);
+        for (int i = 0; i < level; i++) {
+            int choice = random.nextInt(deck.size());
 
-        player.setCard(card);
+            cards[i] = deck.remove(choice);
+        }
+
+        player.setCards(cards);
     }
 
     public void play(){
@@ -56,9 +62,12 @@ public class Game {
         int maximum = 0;
         Player winner = null;
         for (int i = 0; i < players.length; i++) {
-            int cardValue = players[i].getCard().getFace().getValue();
-            if (cardValue > maximum) {
-                maximum = cardValue;
+            int totalCardValue = 0;
+            for (Card card : players[i].getCards()) {
+                totalCardValue += card.getFace().getValue();
+            }
+            if (totalCardValue > maximum) {
+                maximum = totalCardValue;
                 winner = players[i];
             }
         }

@@ -26,7 +26,7 @@ public class PlayerTest {
 
     @Test
     public void testSetAndGetCard() {
-        player.setCard(card);
-        assertEquals(card, player.getCard());
+        player.setCards(card);
+        assertEquals(card, player.getCards()[0]);
     }
 }
